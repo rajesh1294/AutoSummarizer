@@ -13,6 +13,7 @@ import os
 
 from pydub import AudioSegment
 from pydub.silence import split_on_silence
+from pydub.silence import detect_nonsilent
 from playsound import playsound
 
 # a function that splits the audio file into chunks
@@ -40,6 +41,7 @@ def silence_based_conversion(path1):
                               silence_thresh=-36
                               )
     print("Opened file and created chunks")
+    nonsilent_data = detect_nonsilent(song, min_silence_len=500, silence_thresh=-36, seek_step=1)
     # create a directory to store the audio chunks.
     try:
         os.mkdir("E:/Shweta/audio_chunks")
@@ -53,6 +55,10 @@ def silence_based_conversion(path1):
     print("chunks length is", len(chunks))
     i = 0
     # process each chunk
+
+    for chunk_silen in nonsilent_data:
+        print([chunk_si/1000 for chunk_si in chunk_silen])
+
     for chunk in chunks:
 
         # Create 0.5 seconds silence chunk
